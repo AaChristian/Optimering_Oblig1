@@ -10,18 +10,23 @@ namespace Optimering_Oblig1
     {
         static void Main(string[] args)
         {
-            //Random rnd = new Random();
+            Random rnd = new Random();
             int cities = 5;
             Console.Write("Hei!\n");
 
             //Create a multidimensional array to store cost between cities
-            int[,] cost = new int[5, 5] {
-                                                    {0, 1, 7, 6, 3},
-                                                    {1, 0, 9, 2, 1},
-                                                    {7, 9, 0, 8, 3},
-                                                    {6, 2, 8, 0, 8},
-                                                    {3, 1, 3, 8, 0 }
-            };
+            int[,] cost = new int[cities,cities];
+            for (int j = 0; j < cities; j++) {
+                for (int k = 0; k < cities; k++) {
+                    if (j == k) {
+                        cost[j, k] = 0; // The cost to go from a city to the same city is 0.
+                        continue;
+                    }
+                    int rndCost = rnd.Next(1, 11); // Create a random integer between 1 and 10
+                    cost[j, k] = rndCost; 
+                    cost[k, j] = rndCost;
+                }
+            }
 
             // Initiale the random method
             RndMethod(cities);
@@ -41,6 +46,9 @@ namespace Optimering_Oblig1
             visitedCities[0] = start;
             WriteArray(visitedCities);
         }
+
+
+        // METHODS FOR TESTING BELOW //
 
         // Write array to console
         static void WriteArray(int[] a)
