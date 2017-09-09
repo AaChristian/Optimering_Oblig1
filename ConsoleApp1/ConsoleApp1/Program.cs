@@ -29,7 +29,7 @@ namespace Optimering_Oblig1
             }
 
             // Initiale the random method
-            RndMethod(cities);
+            RndMethod(cost, cities);
             // Write out the cost matrix
             WriteMultiArray(cost, cities, cities);
 
@@ -37,13 +37,39 @@ namespace Optimering_Oblig1
         }
 
         // Random method
-        static void RndMethod(int cities)
-        {
+        static void RndMethod(int[,] cost, int cities) {
             Random rnd = new Random();
-            int start = rnd.Next(1, cities);
-            Console.Write(String.Format("Start city: {0}\n", start));
+            int city = rnd.Next(0, cities);
+            int totalCost = 0;
+            int i = 1; // Number of cities visited (starting at 1 as starting city is selected)
+            Console.Write(String.Format("Start city: {0}\n", city));
+            // Create array to store visited cities
             int[] visitedCities = new int[cities];
-            visitedCities[0] = start;
+            // Initialize the array with a value of -1
+            for (int j = 0; j < cities; j++) {
+                visitedCities[j] = -1;
+            }
+            // Mark the start city as visited
+            visitedCities[0] = city;
+            // While all cities have not been visited
+            while (visitedCities.Contains(-1)) {
+                // Choose a random city
+                city = rnd.Next(0, cities);
+                // If the selected city already is visited, try again
+                if (visitedCities.Contains(city)) {
+                    //Console.Write("..\n");
+                    continue;
+                }
+                // Mark the city as visited by entering the value in the array
+                visitedCities[i] = city;
+                Console.Write("Fra {0} til {1} - Kostnad: {2}\n", visitedCities[i - 1], visitedCities[i], cost[visitedCities[i - 1], visitedCities[i]]);
+                // Add the cost between teh previous city and the newly selected city to the total cost variable
+                totalCost += cost[visitedCities[i - 1], visitedCities[i]];
+                // Increase i
+                i++;
+            }
+            Console.Write("\nTotal kostnad: {0}\n", totalCost);
+            // Print the array for the visited cities
             WriteArray(visitedCities);
         }
 
@@ -51,8 +77,7 @@ namespace Optimering_Oblig1
         // METHODS FOR TESTING BELOW //
 
         // Write array to console
-        static void WriteArray(int[] a)
-        {
+        static void WriteArray(int[] a) {
             Console.Write("Allerede besøkte byer:\n");
             foreach (var item in a)
                 Console.Write("{0} ", item);
@@ -60,8 +85,7 @@ namespace Optimering_Oblig1
         }
 
         // Write Multi array to console
-        static void WriteMultiArray(int[,] a, int numb, int numb2)
-        {
+        static void WriteMultiArray(int[,] a, int numb, int numb2) {
             Console.Write("Kostnads matrisen:\n");
             for (int i = 0; i < numb; i++) {
                 for (int j = 0; j < numb2; j++) {
