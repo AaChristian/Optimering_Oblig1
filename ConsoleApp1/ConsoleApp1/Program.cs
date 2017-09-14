@@ -68,6 +68,9 @@ namespace Optimering_Oblig1
                 // Increase i
                 i++;
             }
+            Console.Write("Fra {0} til {1} - Kostnad: {2} (Reiser fra den siste byen tilbake til start)\n", visitedCities[i -1], visitedCities[0], cost[visitedCities[0], visitedCities[cities - 1]]);
+            // Add the cost of returning from the last city to the starting city
+            totalCost += cost[visitedCities[0], visitedCities[cities - 1]];
             Console.Write("\nTotal kostnad: {0}\n", totalCost);
             // Print the array for the visited cities
             WriteArray(visitedCities);
