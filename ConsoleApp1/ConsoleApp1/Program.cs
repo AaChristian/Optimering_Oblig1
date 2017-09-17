@@ -32,7 +32,7 @@ namespace Optimering_Oblig1
             WriteMultiArray(cost, cities, cities);
             // Initiale the random method
             Console.Write("\n---Random method---\n");
-            Console.Write("\nTotal kostnad: {0}\n", RndMethod(cost, cities, rnd));
+            Console.Write("\nTotal cost: {0}\n", RndMethod(cost, cities, rnd));
             // Start random iterativ
             Console.Write("\n---Random iterative method---\n");
             // Initialize lowest cost variable as max integer value
@@ -50,7 +50,7 @@ namespace Optimering_Oblig1
                     lowestCost = iterativeCost;
                 }
             } // End for loop
-            Console.Write("\nTotal kostnad: {0}\n", lowestCost);
+            Console.Write("\nTotal cost: {0}\n", lowestCost);
             // Start greedy method
             Console.Write("\n---Greedy method---\n");
             GreedyMethod(cost, cities, rnd);
@@ -92,7 +92,7 @@ namespace Optimering_Oblig1
             //Console.Write("From {0} to {1} - Cost: {2} (Travels from the last city back to start)\n", visitedCities[i -1], visitedCities[0], cost[visitedCities[0], visitedCities[cities - 1]]);
             // Add the cost of returning from the last city to the starting city
             totalCost += cost[visitedCities[0], visitedCities[cities - 1]];
-            //Console.Write("\nTotal kostnad: {0}\n", totalCost);
+            //Console.Write("\nTotal cost: {0}\n", totalCost);
             //Print the array for the visited cities
             //WriteArray(visitedCities);
             return totalCost;
@@ -137,7 +137,7 @@ namespace Optimering_Oblig1
                 // Increase i
                 i++;
             }
-            Console.Write("\nTotal kostnad: {0}\n", totalCost);
+            Console.Write("\nTotal cost: {0}\n", totalCost);
         }
 
         // METHODS FOR TESTING BELOW //
