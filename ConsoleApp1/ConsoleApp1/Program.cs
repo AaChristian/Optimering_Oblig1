@@ -97,7 +97,6 @@ namespace Optimering_Oblig1
             //WriteArray(visitedCities);
             return totalCost;
         }
-        //HEIHWEIUB#GVI#QBGI#VG=#I
 
         // Greedy method
         static void GreedyMethod(int[,] cost, int cities, Random rnd) {
@@ -139,6 +138,21 @@ namespace Optimering_Oblig1
                 i++;
             }
             Console.Write("\nTotal cost: {0}\n", totalCost);
+        }
+
+        // Improve initial solution
+        static void improveSolution() {
+            // Run the algorithm multiple times
+            for (int i = 0; i < 5; i++) {
+                // Choose 2 random cities
+
+                // Swap their locations
+
+                // If the cost has decreased
+                if () {
+
+                }
+            }
         }
 
         // METHODS FOR TESTING BELOW //
