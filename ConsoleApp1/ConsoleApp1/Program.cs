@@ -11,7 +11,7 @@ namespace Optimering_Oblig1
         static void Main(string[] args)
         {
             Random rnd = new Random();
-            int cities = 5;
+            int cities = 500;
             Console.Write("Hei!\n");
 
             //Create a multidimensional array to store cost between cities
@@ -97,6 +97,7 @@ namespace Optimering_Oblig1
             //WriteArray(visitedCities);
             return totalCost;
         }
+        //HEIHWEIUB#GVI#QBGI#VG=#I
 
         // Greedy method
         static void GreedyMethod(int[,] cost, int cities, Random rnd) {
