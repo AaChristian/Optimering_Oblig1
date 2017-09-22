@@ -11,7 +11,7 @@ namespace Optimering_Oblig1
         static void Main(string[] args)
         {
             Random rnd = new Random();
-            int cities = 500;
+            int cities = 5;
             Console.Write("Hei!\n");
 
             //Create a multidimensional array to store cost between cities
@@ -149,9 +149,9 @@ namespace Optimering_Oblig1
                 // Swap their locations
 
                 // If the cost has decreased
-                if () {
+                /*if () {
 
-                }
+                }*/
             }
         }
 
