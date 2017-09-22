@@ -12,6 +12,9 @@ namespace Optimering_Oblig1
         {
             Random rnd = new Random();
             int cities = 5;
+            int randomCost = 0;
+            int randomItCost = 0;
+            int greedyCost = 0;
             Console.Write("Hei!\n");
 
             //Create a multidimensional array to store cost between cities
@@ -27,49 +30,57 @@ namespace Optimering_Oblig1
                     cost[k, j] = rndCost;
                 }
             } // End for loop
+            // Create arrays for the initial solutions
+            int[] solutionRandom = new int[cities];
+            int[] solutionRandomIt = new int[cities];
+            int[] solutionGreedy = new int[cities];
 
             // Write out the cost matrix
             WriteMultiArray(cost, cities, cities);
             // Initiale the random method
             Console.Write("\n---Random method---\n");
-            Console.Write("\nTotal cost: {0}\n", RndMethod(cost, cities, rnd));
+            randomCost = RndMethod(cost, solutionRandom, cities, rnd);
+            Console.Write("\nTotal cost: {0}\n", randomCost);
             // Start random iterativ
             Console.Write("\n---Random iterative method---\n");
             // Initialize lowest cost variable as max integer value
-            int lowestCost = int.MaxValue;
+            randomItCost = int.MaxValue;
             int iterativeCost;
             // Run the random method five times
             for (int i = 0; i < 5; i++) {
                 //Console.Write("Iterative test {0}:\n", i+1);
                 // Get the cost of the random method
-                iterativeCost = RndMethod(cost, cities, rnd);
+                //InitArray(solutionRandomIt, -1, cities);
+                iterativeCost = RndMethod(cost, solutionRandomIt, cities, rnd);
                 //Console.Write("Current cost {0}:\n", iterativeCost);
                 // Compare the cost with the current lowest cost
-                if (iterativeCost < lowestCost) {
+                if (iterativeCost < randomItCost) {
                     // If the cost is lower, set it as the new lowest cost
-                    lowestCost = iterativeCost;
+                    randomItCost = iterativeCost;
                 }
             } // End for loop
-            Console.Write("\nTotal cost: {0}\n", lowestCost);
+            Console.Write("\nTotal cost: {0}\n", randomItCost);
             // Start greedy method
+            greedyCost = GreedyMethod(cost, solutionGreedy, cities, rnd);
             Console.Write("\n---Greedy method---\n");
-            GreedyMethod(cost, cities, rnd);
+            Console.Write("\nTotal cost: {0}\n", greedyCost);
+            // Improvement method
+            Console.Write("\n---Improvements method---\n");
+            Console.Write("\nImprove Random cost: {0}\n", ImproveSolution(cost, solutionRandom, randomCost, cities, rnd));
+            Console.Write("\nImprove Random Iterative cost: {0}\n", ImproveSolution(cost, solutionRandomIt, randomItCost, cities, rnd));
+            Console.Write("\nImprove Greedy cost: {0}\n", ImproveSolution(cost, solutionGreedy, greedyCost, cities, rnd));
             Console.Read();
         }
 
         // Random method (Also use for random iterative method)
-        static int RndMethod(int[,] cost, int cities, Random rnd) {
+        static int RndMethod(int[,] cost, int[] visitedCities, int cities, Random rnd) {
             //Random rnd = new Random();
             int city = rnd.Next(0, cities);
             int totalCost = 0;
             int i = 1; // Number of cities visited (starting at 1 as starting city is selected)
             //Console.Write(String.Format("Start city: {0}\n", city));
-            // Create array to store visited cities
-            int[] visitedCities = new int[cities];
-            // Initialize the array with a value of -1
-            for (int j = 0; j < cities; j++) {
-                visitedCities[j] = -1;
-            }
+            // Initialize the visited city array with a value of -1
+            InitArray(visitedCities, -1, cities);
             // Mark the start city as visited
             visitedCities[0] = city;
             // While all cities have not been visited
@@ -99,17 +110,18 @@ namespace Optimering_Oblig1
         }
 
         // Greedy method
-        static void GreedyMethod(int[,] cost, int cities, Random rnd) {
+        static int GreedyMethod(int[,] cost, int[] visitedCities, int cities, Random rnd) {
             // Select a random starting city
             int city = rnd.Next(0, cities);
             int totalCost = 0;
             int i = 1; // Number of cities visited (starting at 1 as starting city is selected)
             // Create array to store visited cities
-            int[] visitedCities = new int[cities];
+            /*int[] visitedCities = new int[cities];
             // Initialize the array with a value of -1
             for (int j = 0; j < cities; j++) {
                 visitedCities[j] = -1;
-            }
+            }*/
+            InitArray(visitedCities, -1, cities);
             // Mark the start city as visited
             visitedCities[0] = city;
             // While all cities have not been visited
@@ -137,21 +149,56 @@ namespace Optimering_Oblig1
                 // Increase i
                 i++;
             }
-            Console.Write("\nTotal cost: {0}\n", totalCost);
+            //Console.Write("\nTotal cost: {0}\n", totalCost);
+            return totalCost;
         }
 
         // Improve initial solution
-        static void improveSolution() {
+        static int ImproveSolution(int [,] cost, int[] initSolution, int initCost, int cities, Random rnd) {
+            int i = 0; // Number of iterations
+            int[] bestSolution = new int[cities];
+            int city1;
+            int city2;
+            int temp;
+            int newCost = 0;
+            //WriteArray(initSolution);
             // Run the algorithm multiple times
-            for (int i = 0; i < 5; i++) {
+            while (i < 10) {
                 // Choose 2 random cities
-
+                city1 = rnd.Next(1, cities);
+                city2 = rnd.Next(1, cities);
+                // If the 2 cities is equal, choose a new random city2
+                while (city1 == city2) {
+                    city2 = rnd.Next(1, cities);
+                }
                 // Swap their locations
-
+                temp = initSolution[city1];
+                initSolution[city1] = initSolution[city2];
+                initSolution[city2] = temp;
+                //WriteArray(initSolution);
+                // Calculate the new cost
+                for (int j = 0; j < cities -1; j++) {
+                    //Console.Write("From {0} to {1} - Cost: {2}\n", initSolution[j], initSolution[j+1], cost[initSolution[j], initSolution[j+1]]);
+                    newCost += cost[initSolution[j], initSolution[j + 1]];
+                }
                 // If the cost has decreased
-                /*if () {
+                if (newCost < initCost) {
+                    initCost = newCost;
+                    initSolution.CopyTo(bestSolution, 0);
+                    i = 0;
+                } else {
+                    i++;
+                }
+            }
+            // Return the new cost
+            return initCost;
+            //Console.Write("Ny kostnad: {0}\n", initCost);
+        }
 
-                }*/
+        static void InitArray(int [] array, int value, int k) {
+            // Initialize the array with a value of -1
+            for (int j = 0; j < k; j++) {
+                array[j] = value;
             }
         }
 
