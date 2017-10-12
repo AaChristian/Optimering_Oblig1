@@ -11,9 +11,9 @@ namespace Optimering_Oblig1
     {
         static void Main(string[] args)
         {
-            for (int iter = 0; iter < 1; iter++) {
+            for (int iter = 0; iter < 30; iter++) {
                 Random rnd = new Random();
-                int cities = 100;
+                int cities = 500;
                 int randomCost = 0;
                 int randomItCost = 0;
                 int greedyCost = 0;
@@ -184,6 +184,7 @@ namespace Optimering_Oblig1
                 for (int j = 0; j < cities - 1; j++) {
                     //Console.Write("From {0} to {1} - Cost: {2}\n", initSolution[j], initSolution[j+1], cost[initSolution[j], initSolution[j+1]]);
                     newCost += cost[initSolution[j], initSolution[j + 1]];
+                    //Console.Write("New cost: {0}\n", newCost);
                 }
                 // If the cost has decreased
                 if (newCost < initCost) {
@@ -198,6 +199,7 @@ namespace Optimering_Oblig1
 
                     i++;
                 }
+                newCost = 0;
                 bestSolution.CopyTo(initSolution, 0);
             }
             // Return the new cost
