@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Optimering_Oblig1
 {
@@ -10,65 +11,80 @@ namespace Optimering_Oblig1
     {
         static void Main(string[] args)
         {
-            Random rnd = new Random();
-            int cities = 5;
-            int randomCost = 0;
-            int randomItCost = 0;
-            int greedyCost = 0;
+            for (int iter = 0; iter < 1; iter++) {
+                Random rnd = new Random();
+                int cities = 100;
+                int randomCost = 0;
+                int randomItCost = 0;
+                int greedyCost = 0;
+                int improveRandomCost = 0;
+                int improveIterativeCost = 0;
+                int improveGreedyCost = 0;
+                string txtpath = "C:\\Users\\Student\\Desktop\\test.csv";
 
-            //Create a multidimensional array to store cost between cities
-            int[,] cost = new int[cities,cities];
-            for (int j = 0; j < cities; j++) {
-                for (int k = 0; k < cities; k++) {
-                    if (j == k) {
-                        cost[j, k] = 0; // The cost to go from a city to the same city is 0.
-                        continue;
+                //Create a multidimensional array to store cost between cities
+                int[,] cost = new int[cities, cities];
+                for (int j = 0; j < cities; j++) {
+                    for (int k = 0; k < cities; k++) {
+                        if (j == k) {
+                            cost[j, k] = 0; // The cost to go from a city to the same city is 0.
+                            continue;
+                        }
+                        int rndCost = rnd.Next(1, 11); // Create a random integer between 1 and 10
+                        cost[j, k] = rndCost;
+                        cost[k, j] = rndCost;
                     }
-                    int rndCost = rnd.Next(1, 11); // Create a random integer between 1 and 10
-                    cost[j, k] = rndCost; 
-                    cost[k, j] = rndCost;
+                } // End for loop
+                  // Create arrays for the initial solutions
+                int[] solutionRandom = new int[cities];
+                int[] solutionRandomIt = new int[cities];
+                int[] solutionGreedy = new int[cities];
+
+                // Write out the cost matrix
+                //WriteMultiArray(cost, cities, cities);
+
+                // Initiale the random method
+                Console.Write("\n---Random method---\n");
+                randomCost = RndMethod(cost, solutionRandom, cities, rnd);
+                Console.Write("\nTotal cost: {0}\n", randomCost);
+
+                // Start random iterativ
+                Console.Write("\n---Random iterative method---\n");
+                // Initialize lowest cost variable as max integer value
+                randomItCost = int.MaxValue;
+                int iterativeCost;
+                // Run the random method five times
+                for (int i = 0; i < 5; i++) {
+                    // Get the cost of the random method
+                    iterativeCost = RndMethod(cost, solutionRandomIt, cities, rnd);
+                    // Compare the cost with the current lowest cost
+                    if (iterativeCost < randomItCost) {
+                        // If the cost is lower, set it as the new lowest cost
+                        randomItCost = iterativeCost;
+                    }
+                } // End for loop
+                Console.Write("\nTotal cost: {0}\n", randomItCost);
+
+                // Start greedy method
+                greedyCost = GreedyMethod(cost, solutionGreedy, cities, rnd);
+                Console.Write("\n---Greedy method---\n");
+                Console.Write("\nTotal cost: {0}\n", greedyCost);
+
+                // Improvement method
+                improveRandomCost = ImproveSolution(cost, solutionRandom, randomCost, cities, rnd);
+                improveIterativeCost = ImproveSolution(cost, solutionRandomIt, randomItCost, cities, rnd);
+                improveGreedyCost = ImproveSolution(cost, solutionGreedy, greedyCost, cities, rnd);
+                Console.Write("\n---Improvements method---\n");
+                Console.Write("\nImprove Random cost: {0}\n", improveRandomCost);
+                Console.Write("\nImprove Random Iterative cost: {0}\n", improveIterativeCost);
+                Console.Write("\nImprove Greedy cost: {0}\n", improveGreedyCost);
+
+
+                using (StreamWriter sw = File.AppendText(txtpath)) {
+                    sw.WriteLine(randomCost + ", " + randomItCost + ", " + greedyCost + ", " + improveRandomCost + ", " + improveIterativeCost + ", " + improveGreedyCost);
                 }
-            } // End for loop
-            // Create arrays for the initial solutions
-            int[] solutionRandom = new int[cities];
-            int[] solutionRandomIt = new int[cities];
-            int[] solutionGreedy = new int[cities];
+            }
 
-            // Write out the cost matrix
-            WriteMultiArray(cost, cities, cities);
-
-            // Initiale the random method
-            Console.Write("\n---Random method---\n");
-            randomCost = RndMethod(cost, solutionRandom, cities, rnd);
-            Console.Write("\nTotal cost: {0}\n", randomCost);
-
-            // Start random iterativ
-            Console.Write("\n---Random iterative method---\n");
-            // Initialize lowest cost variable as max integer value
-            randomItCost = int.MaxValue;
-            int iterativeCost;
-            // Run the random method five times
-            for (int i = 0; i < 5; i++) {
-                // Get the cost of the random method
-                iterativeCost = RndMethod(cost, solutionRandomIt, cities, rnd);
-                // Compare the cost with the current lowest cost
-                if (iterativeCost < randomItCost) {
-                    // If the cost is lower, set it as the new lowest cost
-                    randomItCost = iterativeCost;
-                }
-            } // End for loop
-            Console.Write("\nTotal cost: {0}\n", randomItCost);
-
-            // Start greedy method
-            greedyCost = GreedyMethod(cost, solutionGreedy, cities, rnd);
-            Console.Write("\n---Greedy method---\n");
-            Console.Write("\nTotal cost: {0}\n", greedyCost);
-
-            // Improvement method
-            Console.Write("\n---Improvements method---\n");
-            Console.Write("\nImprove Random cost: {0}\n", ImproveSolution(cost, solutionRandom, randomCost, cities, rnd));
-            Console.Write("\nImprove Random Iterative cost: {0}\n", ImproveSolution(cost, solutionRandomIt, randomItCost, cities, rnd));
-            Console.Write("\nImprove Greedy cost: {0}\n", ImproveSolution(cost, solutionGreedy, greedyCost, cities, rnd));
             Console.Read();
         } // End main method
 
@@ -144,25 +160,28 @@ namespace Optimering_Oblig1
         static int ImproveSolution(int [,] cost, int[] initSolution, int initCost, int cities, Random rnd) {
             int i = 0; // Number of iterations
             int[] bestSolution = new int[cities];
+            initSolution.CopyTo(bestSolution, 0);
             int city1;
             int city2;
             int temp;
             int newCost = 0;
             // Run the algorithm multiple times
-            while (i < 10) {
+            while (i < 1000) {
                 // Choose 2 random cities
-                city1 = rnd.Next(1, cities);
-                city2 = rnd.Next(1, cities);
+                city1 = rnd.Next(0, cities);
+                city2 = rnd.Next(0, cities);
                 // If the 2 cities is equal, choose a new random city2
                 while (city1 == city2) {
-                    city2 = rnd.Next(1, cities);
+                    city2 = rnd.Next(0, cities);
                 }
                 // Swap their locations
+                //WriteArray(initSolution);
                 temp = initSolution[city1];
                 initSolution[city1] = initSolution[city2];
                 initSolution[city2] = temp;
+                //WriteArray(initSolution);
                 // Calculate the new cost
-                for (int j = 0; j < cities -1; j++) {
+                for (int j = 0; j < cities - 1; j++) {
                     //Console.Write("From {0} to {1} - Cost: {2}\n", initSolution[j], initSolution[j+1], cost[initSolution[j], initSolution[j+1]]);
                     newCost += cost[initSolution[j], initSolution[j + 1]];
                 }
@@ -176,8 +195,10 @@ namespace Optimering_Oblig1
                     i = 0;
                 } else {
                     // Increase I if the new cost  isn't lower the the current cost
+
                     i++;
                 }
+                bestSolution.CopyTo(initSolution, 0);
             }
             // Return the new cost
             return initCost;
