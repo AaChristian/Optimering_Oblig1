@@ -20,7 +20,8 @@ namespace Optimering_Oblig1
                 int improveRandomCost = 0;
                 int improveIterativeCost = 0;
                 int improveGreedyCost = 0;
-                string txtpath = "C:\\Users\\Student\\Desktop\\test.csv";
+                //string txtpath = "C:\\Users\\Student\\Desktop\\test.csv";
+                string txtpath = "C:\\Users\\ChristianAashamar\\Desktop\\test.csv";
 
                 //Create a multidimensional array to store cost between cities
                 int[,] cost = new int[cities, cities];
