@@ -11,9 +11,9 @@ namespace Optimering_Oblig1
     {
         static void Main(string[] args)
         {
-            for (int iter = 0; iter < 30; iter++) {
+            for (int iter = 0; iter < 50; iter++) {
                 Random rnd = new Random();
-                int cities = 500;
+                int cities = 10000;
                 int randomCost = 0;
                 int randomItCost = 0;
                 int greedyCost = 0;
